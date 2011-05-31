@@ -10,8 +10,8 @@ outputs the parsed result to stdout as a JSON encoded string::
     $ ping -c 5 www.google.com | ./pingparser.py
     {"received": "3", "jitter": "55.831", "avgping": "59.012", "minping": "17.304", "host": "www.l.google.com", "maxping": "137.927", "sent": "5"}
 
-Or in Python you can call `pingparser.parse()`, which returns a dictionary
-containing the parsed fields::
+Or in Python you can call ``pingparser.parse(ping_output)``, which returns
+a dictionary containing the parsed fields::
 
     >>> import pingparser
     >>> pingparser.parse('''
