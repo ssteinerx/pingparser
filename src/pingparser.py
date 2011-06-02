@@ -9,6 +9,12 @@ from optparse import OptionGroup,OptionParser
 import re
 import sys
 
+def _get_match_groups(ping_output, regex):
+    match = regex.search(ping_output)
+    if not match:
+        raise Exception('Invalid PING output:\n' + ping_output)
+    return match.groups()
+
 def parse(ping_output):
     """
     Parses the `ping_output` string into a dictionary containing the following
@@ -26,16 +32,17 @@ def parse(ping_output):
                     in milliseconds
     """
     matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) \(')
-    match = matcher.search(ping_output)
-    if not match:
-        raise Exception('Invalid PING output')
-    host = match.groups()[0]
+    host = _get_match_groups(ping_output, matcher)[0]
 
     matcher = re.compile(r'(\d+) packets transmitted, (\d+) received')
-    sent, received = matcher.search(ping_output).groups()
+    sent, received = _get_match_groups(ping_output, matcher)
 
-    matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
-    minping, avgping, maxping, jitter = matcher.search(ping_output).groups()
+    try:
+        matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
+        minping, avgping, maxping, jitter = _get_match_groups(ping_output,
+                                                              matcher)
+    except:
+        minping, avgping, maxping, jitter = ['NaN']*4
 
     return {'host': host, 'sent': sent, 'received': received,
             'minping': minping, 'avgping': avgping, 'maxping': maxping,

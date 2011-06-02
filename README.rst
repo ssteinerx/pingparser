@@ -28,11 +28,7 @@ a dictionary containing the parsed fields::
 
 Installing
 ~~~~~~~~~~
-Installing from PyPI is easy::
-
-  $ pip install pingparser
-
-or you grab the source and run::
+Download the source and run::
 
   $ python setup.py install
 
