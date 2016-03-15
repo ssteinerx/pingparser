@@ -23,6 +23,7 @@ def parse(ping_output):
         `host`: *string*; the target hostname that was pinged
         `sent`: *int*; the number of ping request packets sent
         `received`: *int*; the number of ping reply packets received
+        `packet_loss`: *int*; the percentage of  packet loss
         `minping`: *float*; the minimum (fastest) round trip ping request/reply
                     time in milliseconds
         `avgping`: *float*; the average round trip ping time in milliseconds
@@ -34,8 +35,8 @@ def parse(ping_output):
     matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) \(')
     host = _get_match_groups(ping_output, matcher)[0]
 
-    matcher = re.compile(r'(\d+) packets transmitted, (\d+) received')
-    sent, received = _get_match_groups(ping_output, matcher)
+    matcher = re.compile(r'(\d+) packets transmitted, (\d+) received, (\d+)% packet loss')
+    sent, received, packet_loss = _get_match_groups(ping_output, matcher)
 
     try:
         matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
@@ -44,7 +45,7 @@ def parse(ping_output):
     except:
         minping, avgping, maxping, jitter = ['NaN']*4
 
-    return {'host': host, 'sent': sent, 'received': received,
+    return {'host': host, 'sent': sent, 'received': received, 'packet_loss': packet_loss,
             'minping': minping, 'avgping': avgping, 'maxping': maxping,
             'jitter': jitter}
 
@@ -64,12 +65,13 @@ def main(argv=sys.argv):
     \t%h    host name or IP address
     \t%s    packets sent
     \t%r    packets received
+    \t%p    packet_loss
     \t%m    minimum ping in milliseconds
     \t%a    average ping in milliseconds
     \t%M    maximum ping in milliseconds
     \t%j    jitter in milliseconds
 
-    Default FORMAT is %h,%s,%r,%m,%a,%M,%j""")
+    Default FORMAT is %h,%s,%r,%p,%m,%a,%M,%j""")
     parser.add_option_group(format_group)
 
     (options, args) = parser.parse_args()
@@ -83,6 +85,7 @@ def main(argv=sys.argv):
     format_replacements = [('%h', 'host'),
                            ('%s', 'sent'),
                            ('%r', 'received'),
+                           ('%p', 'packet_loss'),
                            ('%m', 'minping'),
                            ('%a', 'avgping'),
                            ('%M', 'maxping'),
