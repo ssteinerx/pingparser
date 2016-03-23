@@ -3,6 +3,7 @@
 """
 Parses the output of the system ping command.
 """
+__version__ = '0.3'
 
 from optparse import OptionGroup,OptionParser
 
@@ -58,7 +59,7 @@ def main(argv=sys.argv):
 
     usage = 'Usage: %prog [OPTIONS] [+FORMAT]\n\n'\
             'Parses output from the system ping command piped in via stdin.'
-    parser = OptionParser(usage=usage, version="%prog 0.1")
+    parser = OptionParser(usage=usage, version="%prog " + __version__)
 
     format_group = OptionGroup(parser,
     """FORMAT controls the output. Interpreted sequences are:
