@@ -8,14 +8,15 @@ You can pipe ping command output into pingparser.py on the command line, which
 outputs the parsed result to stdout in a customizable output format (see
 ``./pingparser.py --help`` for details)::
 
-  $ ping -c 5 www.google.com | ./pingparser.py +%h %s %r %m %M %a
-  www.l.google.com 5 5 14.711 26.378 19.621
+  $ ping -c 5 www.google.com | ./pingparser.py '+%h %s %r %p %m %M %a'
+  www.l.google.com 5 5 0 14.711 26.378 19.621
 
 Or in Python you can call ``pingparser.parse(ping_output)``, which returns
 a dictionary containing the parsed fields::
 
   >>> import pingparser
-  >>> pingparser.parse('''
+  >>> from collections import OrderedDict
+  >>> results = pingparser.parse('''
   ... PING www.l.google.com (74.125.225.84) 56(84) bytes of data.
   ... 64 bytes from 74.125.225.84: icmp_req=1 ttl=55 time=13.9 ms
   ... 64 bytes from 74.125.225.84: icmp_req=2 ttl=55 time=21.4 ms
@@ -23,7 +24,8 @@ a dictionary containing the parsed fields::
   ... --- www.l.google.com ping statistics ---
   ... 2 packets transmitted, 2 received, 0% packet loss, time 5072ms
   ... rtt min/avg/max/mdev = 13.946/17.682/21.418/3.736 ms''')
-  {'received': '2', 'jitter': '3.736', 'avgping': '17.682', 'minping': '13.946', 'host': 'www.l.google.com', 'maxping': '21.418', 'sent': '2'}
+  >>> OrderedDict(sorted(results.items()))
+  OrderedDict([('avgping', '17.682'), ('host', 'www.l.google.com'), ('jitter', '3.736'), ('maxping', '21.418'), ('minping', '13.946'), ('packet_loss', '0'), ('received', '2'), ('sent', '2')])
 
 
 Installing
