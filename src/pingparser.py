@@ -33,7 +33,7 @@ def parse(ping_output):
         `jitter`: *float*; the standard deviation between round trip ping times
                     in milliseconds
     """
-    matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) \(')
+    matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) *\(')
     host = _get_match_groups(ping_output, matcher)[0]
 
     matcher = re.compile(r'(\d+) packets transmitted, (\d+) received, (\d+)% packet loss')
