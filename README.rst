@@ -1,6 +1,6 @@
 pingparser
 ==========
-pingparser parses the output of the system ping command.
+pingparser parses the output of the system ping or ping6 command.
 
 Usage
 ~~~~~
