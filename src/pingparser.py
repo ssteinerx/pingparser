@@ -16,6 +16,12 @@ def _get_match_groups(ping_output, regex):
         raise Exception('Invalid PING output:\n' + ping_output)
     return match.groups()
 
+# Pull regex compilation out of parser() so it only gets done once
+host_matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) *\(')
+# https://regex101.com/r/zt9G2w/1
+rslt_matcher = re.compile(r'(\d+) packets transmitted, (\d+) (?:packets )?received, (\d+)% packet loss')
+minmax_matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
+
 def parse(ping_output):
     """
     Parses the `ping_output` string into a dictionary containing the following
@@ -33,19 +39,14 @@ def parse(ping_output):
         `jitter`: *float*; the standard deviation between round trip ping times
                     in milliseconds
     """
-    matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) *\(')
-    host = _get_match_groups(ping_output, matcher)[0]
-
-    # https://regex101.com/r/zt9G2w/1
-    matcher = re.compile(r'(\d+) packets transmitted, (\d+) (?:packets )?received, (\d+)% packet loss')
-    sent, received, packet_loss = _get_match_groups(ping_output, matcher)
+    host = _get_match_groups(ping_output, host_matcher)[0]
+    sent, received, packet_loss = _get_match_groups(ping_output, rslt_matcher)
 
     try:
-        matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
         minping, avgping, maxping, jitter = _get_match_groups(ping_output,
-                                                              matcher)
+                                                              minmax_matcher)
     except:
-        minping, avgping, maxping, jitter = ['NaN']*4
+        minping = avgping = maxping = jitter = 'NaN'
 
     return {'host': host, 'sent': sent, 'received': received, 'packet_loss': packet_loss,
             'minping': minping, 'avgping': avgping, 'maxping': maxping,
