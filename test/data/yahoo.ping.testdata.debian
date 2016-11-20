@@ -1,0 +1,6 @@
+yahoo.com,1,1,0,0.557,0.557,0.557,0.000
+PING yahoo.com (98.138.253.109): 56 data bytes
+64 bytes from 98.138.253.109: icmp_seq=0 ttl=37 time=0.557 ms
+--- yahoo.com ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 0.557/0.557/0.557/0.000 ms

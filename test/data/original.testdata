@@ -1,0 +1,8 @@
+www.l.google.com,2,2,0,13.946,17.682,21.418,3.736
+PING www.l.google.com (74.125.225.84) 56(84) bytes of data.
+64 bytes from 74.125.225.84: icmp_req=1 ttl=55 time=13.9 ms
+64 bytes from 74.125.225.84: icmp_req=2 ttl=55 time=21.4 ms
+
+--- www.l.google.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 5072ms
+rtt min/avg/max/mdev = 13.946/17.682/21.418/3.736 ms
