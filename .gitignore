@@ -4,3 +4,5 @@
 __pycache__/
 MANIFEST
 *.egg-info/
+build/
+dist/

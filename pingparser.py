@@ -10,6 +10,10 @@ from optparse import OptionGroup, OptionParser
 import re
 import sys
 
+__all__ = ["parse",
+           "format_ping_result",
+           "main",
+           ]
 
 # Pull regex compilation out of parser() so it only gets done once
 
@@ -18,14 +22,16 @@ host_matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) *\(')
 
 # Old version, failed on OS X due to 0.0% formatted percentage (November 20, 2016, ssteinerX)
 # https://regex101.com/r/zt9G2w/1
-# rslt_matcher = re.compile(r'(\d+) packets transmitted, (\d+) (?:packets )?received, (\d+)% packet loss')
+# rslt_matcher = re.compile(r'(\d+) packets transmitted, '
+#                            '(\d+) (?:packets )?received,'
+#                            ' (\d+)% packet loss')
 
 # This one works on OS X output which includes the percentage in 0.0% format
 # https://regex101.com/r/nmjQzI/2
 rslt_matcher = re.compile(r'(\d+) packets transmitted, (\d+) (?:packets )?received, (\d+\.?\d*)% packet loss')
 
 # Pull out round-trip min/avg/max/stddev = 49.042/49.042/49.042/0.000 ms
-# TODO: make this more specific
+# TODO: make this more specific i.e. match a bit before the '=' sign
 minmax_matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
 
 # Available replacements
@@ -38,12 +44,14 @@ format_replacements = [('%h', 'host'),
                        ('%M', 'maxping'),
                        ('%j', 'jitter')]
 
-# Default output just does substitution in `format_replacements` order
+# Default output just prints fields in `format_replacements` order
 default_format = ','.join([fmt for fmt, field in format_replacements])
 
 
 def _get_match_groups(ping_output, regex):
-    """Get groups by matching regex in output from ping command."""
+    """
+    Get groups by matching regex in output from ping command.
+    """
     match = regex.search(ping_output)
     if not match:
         raise Exception('Invalid PING output:\n' + ping_output)
@@ -147,7 +155,9 @@ def main(argv=sys.argv):
 
     ping_result = parse(ping_output)
 
-    format_string = default_format
+    # NOTE: the "+...format string" will override options.format
+    #       if both are there
+    format_string = options.format or default_format
 
     # If there's something left after optparse is done,
     # see if it's a '+' prefixed format string and, if so, use it
