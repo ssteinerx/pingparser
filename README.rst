@@ -8,7 +8,7 @@ You can pipe ping command output into pingparser.py on the command line, which
 outputs the parsed result to stdout in a customizable output format (see
 ``./pingparser.py --help`` for details)::
 
-  $ ping -c 5 www.google.com | ./pingparser.py '+%h %s %r %p %m %M %a'
+  $ ping -c 5 www.google.com | ./pingparser.py -f '%h %s %r %p %m %M %a'
   www.l.google.com 5 5 0 14.711 26.378 19.621
 
 Or in Python you can call ``pingparser.parse(ping_output)``, which returns

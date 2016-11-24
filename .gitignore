@@ -3,3 +3,6 @@
 .tox/
 __pycache__/
 MANIFEST
+*.egg-info/
+build/
+dist/
