@@ -2,6 +2,12 @@ pingparser
 ==========
 pingparser parses the output of the system ping or ping6 command.
 
+Yay, Travis status:
+
+.. image:: https://travis-ci.org/ssteinerx/pingparser.svg?branch=master
+    :target: https://travis-ci.org/ssteinerx/pingparser
+
+
 Usage
 ~~~~~
 You can pipe ping command output into pingparser.py on the command line, which
