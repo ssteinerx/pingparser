@@ -4,4 +4,4 @@ WORK IN PROGRESS...
 
 * Add CHANGES.txt (this file)
 * Remove Python 3.1, 3.2, and 3.3 from tests.  Versions are obsolete and are no longer supported.
-* 
+* Add travis.yml  
