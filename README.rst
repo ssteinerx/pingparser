@@ -7,7 +7,6 @@ Yay, Travis status:
 .. image:: https://travis-ci.org/ssteinerx/pingparser.svg?branch=master
     :target: https://travis-ci.org/ssteinerx/pingparser
 
-
 Usage
 ~~~~~
 You can pipe ping command output into pingparser.py on the command line, which

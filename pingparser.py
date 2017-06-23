@@ -3,7 +3,7 @@
 """
 Parses the output of the system ping command.
 """
-__version__ = '0.4'
+__version__ = '0.5'
 
 from optparse import OptionGroup, OptionParser
 
@@ -12,7 +12,6 @@ import sys
 
 __all__ = ["parse",
            "format_ping_result",
-           "main",
            ]
 
 # Pull regex compilation out of parser() so it only gets done once
@@ -31,7 +30,6 @@ host_matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) *\(')
 rslt_matcher = re.compile(r'(\d+) packets transmitted, (\d+) (?:packets )?received, (\d+\.?\d*)% packet loss')
 
 # Pull out round-trip min/avg/max/stddev = 49.042/49.042/49.042/0.000 ms
-# TODO: make this more specific i.e. match a bit before the '=' sign
 minmax_matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')
 
 # Available replacements
@@ -123,18 +121,22 @@ def main(argv=sys.argv):
     # parser.add_option("+", dest="format",
     #                  help="optional format string")
 
-    format_group = OptionGroup(parser,
-    """FORMAT controls the output. Interpreted sequences are:
-    \t%h    host name or IP address
-    \t%s    packets sent
-    \t%r    packets received
-    \t%p    packet_loss
-    \t%m    minimum ping in milliseconds
-    \t%a    average ping in milliseconds
-    \t%M    maximum ping in milliseconds
-    \t%j    jitter in milliseconds
+    format_group = OptionGroup(
+        parser,
+        """
+        FORMAT controls the output. Interpreted sequences are:
 
-    Default FORMAT is: """ + default_format)
+            \t%h    host name or IP address
+            \t%s    packets sent
+            \t%r    packets received
+            \t%p    packet_loss
+            \t%m    minimum ping in milliseconds
+            \t%a    average ping in milliseconds
+            \t%M    maximum ping in milliseconds
+            \t%j    jitter in milliseconds
+
+        Default FORMAT is: """ + default_format
+    )
 
     parser.add_option_group(format_group)
     (options, args) = parser.parse_args()
@@ -175,6 +177,7 @@ def main(argv=sys.argv):
     sys.stdout.write(output)
 
     sys.exit(0)
+
 
 if __name__ == "__main__":
     try:

@@ -1,0 +1,19 @@
+ToDo: June 22, 2017
+-------------------
+pingparser.py:
+
+  > Consolidate `format_replacements`, currently a list of tuples, then
+    duplicated in return statement of parse() function.
+
+    Make it an ordered dict and use it to build `default_format` and
+    JSON return value.
+
+    `default_format` should only be built JIT since it's not used when:
+        * pingparser is used as a library (i.e. when just calling parse() on results).
+        * when different formatting is given on the command line
+
+  > NOTE: pulled from my (ssteinerX) inline comments.  Not sure exactly what I meant...it's not specific enough, but says:
+    "Make `minmax_matcher` more specific i.e. match a bit before the '=' sign"
+
+  > Completely remove "+" parameter formatting.
+    See related NOTE:s in pingparser.py near text: "+...format string"
